@@ -10,21 +10,42 @@ router.post('/addUser', [
   check('user_name').not().isEmpty(),
   check('dob').not().isEmpty(),
 ],
- (req, res, next) => {
-  validator(req, res, next)
-},
+  (req, res, next) => {
+    validator(req, res, next)
+  },
   (req, res) => {
     userHandler.addUser(req, res)
   })
 
-  router.get('/viewFilter',
+router.get('/viewUser',
+  [
+    check('user_id').not().isEmpty(),
+  ],
   (req, res, next) => {
 
     validator(req, res, next)
   },
   (req, res) => {
-    userHandler.viewFilter(req, res)
+    userHandler.viewUser(req, res)
   })
 
+router.get('/listUser',
+  (req, res, next) => {
+
+    validator(req, res, next)
+  },
+  (req, res) => {
+    userHandler.listUser(req, res)
+  })
+
+  router.put('/updateUser', [
+    check('user_id').not().isEmpty(),
+  ],
+    (req, res, next) => {
+      validator(req, res, next)
+    },
+    (req, res) => {
+      userHandler.addUser(req, res)
+    })
 
 module.exports = router;

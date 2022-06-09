@@ -26,8 +26,64 @@ const user_lib = {
         })
     },
 
-  
+    viewUser: async (sql_con, user_id) => {
+        return new Promise(function (resolve, reject) {
+            sql_con.query(`Select * from user_details where is_deleted != 1 and id = ?  `, [user_id], (err, result) => {
+                if (!err) {
+                    resolve(result)
+                } else {
+                    reject(err)
+                }
+            })
+        })
+    },
 
+    listUser: async (sql_con) => {
+        return new Promise(function (resolve, reject) {
+            sql_con.query(`Select * from user_details where is_deleted != 1  `, (err, result) => {
+                if (!err) {
+                    resolve(result)
+                } else {
+                    reject(err)
+                }
+            })
+        })
+    },
+
+    checkUser: async (sql_con, user_id) => {
+        return new Promise(function (resolve, reject) {
+            sql_con.query(`Select * from user_details where is_deleted != 1 and id = ?  `, [user_id], (err, result) => {
+                if (!err) {
+                    resolve(result)
+                } else {
+                    reject(err)
+                }
+            })
+        })
+    },
+    updateUserData: async (sql_con, user_id,updateData) => {
+        return new Promise(function (resolve, reject) {
+            sql_con.query(`UPDATE user_details SET ${updateData} WHERE id = ${user_id} `, [], (err, result) => {
+                if (!err) {
+                    resolve(result)
+                } else {
+                    reject(err)
+                }
+            })
+        })
+    },
+    deleteUserData: async (sql_con, user_id) => { 
+        return new Promise(function (resolve, reject) {
+            //Soft delete
+            sql_con.query(`UPDATE user_details SET is_deleted = 1 WHERE id = ${user_id} `, [], (err, result) => {
+                if (!err) {
+                    resolve(result)
+                } else {
+                    reject(err)
+                }
+            })
+        })
+    },
 }
 
 module.exports = { user_lib }
