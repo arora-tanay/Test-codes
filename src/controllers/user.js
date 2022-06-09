@@ -131,21 +131,23 @@ exports.updateUser = async (req, res) => {
             let updateData = '';
             //Loop to update the data which have values
             asyncLoop(data, (item, next) => {
+                if (item.key == "user_id") {
+                    next();
+                }else {
                 if (updateData != '') {
                     updateData += ",";
                 }
-                if (item.key == "user_id") {
-                    next();
-                }
+               
                 updateData += " `" + item.key + "`='" + item.value + "'";
                 next();
+            }
             }, async (err) => {
                 if (err) {
                     console.log("error===>>>" + e);
                     return response(res, 500, message.UPDATE_ERROR, [], null);
                 } else {
                     //Update function
-                    let updateUserData = await user_dao.updateUserData(sql_con, updateData)
+                    let updateUserData = await user_dao.updateUserData(sql_con,data.user_id, updateData)
                     return response(res, 200, message.DATA_UPDATED, {}, null);
                 }
             })

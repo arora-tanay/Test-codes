@@ -3,7 +3,8 @@ const user_lib = {
     checkExistingUser: async (sql_con, email) => {
         return new Promise(function (resolve, reject) {
             let sql_query = `Select * from user_details where is_deleted != 1  `
-            sql_query = email != "" ? sql_query + ` and email = ${email} `: sql_query
+            sql_query = email != "" ? sql_query + ` and email = "${email}" `: sql_query
+            console.log(sql_query)
             sql_con.query(sql_query, [], (err, result) => {
                 if (!err) {
                     resolve(result)
@@ -63,6 +64,7 @@ const user_lib = {
     },
     updateUserData: async (sql_con, user_id,updateData) => {
         return new Promise(function (resolve, reject) {
+            console.log(`UPDATE user_details SET ${updateData} WHERE id = ${user_id} `)
             sql_con.query(`UPDATE user_details SET ${updateData} WHERE id = ${user_id} `, [], (err, result) => {
                 if (!err) {
                     resolve(result)

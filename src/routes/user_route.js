@@ -38,14 +38,24 @@ router.get('/listUser',
     userHandler.listUser(req, res)
   })
 
-  router.put('/updateUser', [
-    check('user_id').not().isEmpty(),
-  ],
-    (req, res, next) => {
-      validator(req, res, next)
-    },
-    (req, res) => {
-      userHandler.addUser(req, res)
-    })
+router.put('/updateUser', [
+  check('user_id').not().isEmpty(),
+],
+  (req, res, next) => {
+    validator(req, res, next)
+  },
+  (req, res) => {
+    userHandler.updateUser(req, res)
+  })
+
+router.delete('/deleteUser', [
+  check('user_id').not().isEmpty(),
+],
+  (req, res, next) => {
+    validator(req, res, next)
+  },
+  (req, res) => {
+    userHandler.deleteUser(req, res)
+  })
 
 module.exports = router;
