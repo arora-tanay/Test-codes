@@ -3,13 +3,28 @@ var router = express.Router()
 const { check, validationResult } = require('express-validator');
 const userHandler = require('../controllers/user')
 const validator = require('../utils/validator');
+const utility = require("../utils/utility");
+
+router.post('/login', [
+  check('email').not().isEmpty(),
+  check('password').not().isEmpty(),
+],
+  (req, res, next) => {
+    validator(req, res, next)
+  },
+  (req, res) => {
+    userHandler.login(req, res)
+  })
 
 router.post('/addUser', [
   check('email').not().isEmpty(),
   check('mobile').not().isEmpty(),
   check('user_name').not().isEmpty(),
   check('dob').not().isEmpty(),
+  check('usertype').not().isEmpty(),
+  check('password').not().isEmpty(),
 ],
+  [utility.verify_token],
   (req, res, next) => {
     validator(req, res, next)
   },
@@ -21,6 +36,7 @@ router.get('/viewUser',
   [
     check('user_id').not().isEmpty(),
   ],
+  [utility.verify_token],
   (req, res, next) => {
 
     validator(req, res, next)
@@ -34,6 +50,7 @@ router.get('/listUser',
 
     validator(req, res, next)
   },
+  [utility.verify_token],
   (req, res) => {
     userHandler.listUser(req, res)
   })
@@ -41,6 +58,7 @@ router.get('/listUser',
 router.put('/updateUser', [
   check('user_id').not().isEmpty(),
 ],
+  [utility.verify_token],
   (req, res, next) => {
     validator(req, res, next)
   },
@@ -51,6 +69,7 @@ router.put('/updateUser', [
 router.delete('/deleteUser', [
   check('user_id').not().isEmpty(),
 ],
+  [utility.verify_token],
   (req, res, next) => {
     validator(req, res, next)
   },

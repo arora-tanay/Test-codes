@@ -14,10 +14,21 @@ const user_lib = {
             })
         })
     },
-    insertUserData: async (sql_con, data) => {
+    updateToken: async (sql_con, user_id, random_string, usertype) => {
         return new Promise(function (resolve, reject) {
-            sql_con.query('Insert into user_details (user_name,email,mobile,dob) VALUES (?,?,?,?)' ,
-            [data.user_name, data.email,data.mobile,data.dob], (err, result) => {
+            sql_con.query(`INSERT INTO user_login (user_id,token,usertype) VALUES (?,?,?)` , [user_id, random_string, usertype], (err, result) => {
+                if (!err) {
+                    resolve(result)
+                } else {
+                    reject(err)
+                }
+            })
+        })
+    },
+    insertUserData: async (sql_con, data,tokenData) => {
+        return new Promise(function (resolve, reject) {
+            sql_con.query('Insert into user_details (user_name,email,mobile,dob,usertype,profile_url,password,created_by) VALUES (?,?,?,?,?,?,?,?)' ,
+            [data.user_name, data.email,data.mobile,data.dob,data.usertype,data.profile_url,data.password,tokenData.user_id], (err, result) => {
                 if (!err) {
                     resolve(result)
                 } else {
@@ -39,9 +50,9 @@ const user_lib = {
         })
     },
 
-    listUser: async (sql_con) => {
+    listUser: async (sql_con,user_id) => {
         return new Promise(function (resolve, reject) {
-            sql_con.query(`Select * from user_details where is_deleted != 1  `, (err, result) => {
+            sql_con.query(`Select * from user_details where is_deleted != 1 and created_by = ?  `,[user_id], (err, result) => {
                 if (!err) {
                     resolve(result)
                 } else {
@@ -51,9 +62,21 @@ const user_lib = {
         })
     },
 
-    checkUser: async (sql_con, user_id) => {
+    noTokenlistUser: async (sql_con) => {
         return new Promise(function (resolve, reject) {
-            sql_con.query(`Select * from user_details where is_deleted != 1 and id = ?  `, [user_id], (err, result) => {
+            sql_con.query(`Select id as user_id,profile_url from user_details where is_deleted != 1  `, (err, result) => {
+                if (!err) {
+                    resolve(result)
+                } else {
+                    reject(err)
+                }
+            })
+        })
+    },
+
+    checkUser: async (sql_con, user_id,token_user_id) => {
+        return new Promise(function (resolve, reject) {
+            sql_con.query(`Select * from user_details where is_deleted != 1 and id = ? and created_by = ?  `, [user_id,token_user_id], (err, result) => {
                 if (!err) {
                     resolve(result)
                 } else {

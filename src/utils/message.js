@@ -5,5 +5,11 @@ module.exports = {
     USER_DETAILS :'User details have been fetched ',
     NO_USER: 'No user found',
     USER_LIST : 'List of users have been fetched',
+    LOGGED_IN: 'User has been logged in',
+    INVALID_USER_PASSWORD : 'Invalid user password ',
+    EMAIL_REQUIRED : 'Email is required to login ' ,
+    LOGIN_ADD_ERROR : 'Please login to add user ',
+    PERMISSION_DENIED : 'You donot have permission to perform this operation ',
+    NO_TOKEN_PROVIDED : 'No token provided',
 };
 
