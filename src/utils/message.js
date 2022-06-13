@@ -11,5 +11,8 @@ module.exports = {
     LOGIN_ADD_ERROR : 'Please login to add user ',
     PERMISSION_DENIED : 'You donot have permission to perform this operation ',
     NO_TOKEN_PROVIDED : 'No token provided',
+    INVALID_TOKEN : 'Invalid token ',
+    ADDRESS_DELETED : 'Address deleted successfully',
+    ADDRESS_UPDATED : 'Address updated ',
 };
 

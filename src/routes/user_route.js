@@ -3,8 +3,10 @@ var router = express.Router()
 const { check, validationResult } = require('express-validator');
 const userHandler = require('../controllers/user')
 const validator = require('../utils/validator');
-const utility = require("../utils/utility");
+const auth = require("../middleware/auth");
 
+
+//Create function if token is optional then tha will run 
 router.post('/login', [
   check('email').not().isEmpty(),
   check('password').not().isEmpty(),
@@ -24,7 +26,7 @@ router.post('/addUser', [
   check('usertype').not().isEmpty(),
   check('password').not().isEmpty(),
 ],
-  [utility.verify_token],
+[auth.verify_token],
   (req, res, next) => {
     validator(req, res, next)
   },
@@ -36,7 +38,7 @@ router.get('/viewUser',
   [
     check('user_id').not().isEmpty(),
   ],
-  [utility.verify_token],
+  [auth.verify_no_token],
   (req, res, next) => {
 
     validator(req, res, next)
@@ -50,7 +52,7 @@ router.get('/listUser',
 
     validator(req, res, next)
   },
-  [utility.verify_token],
+  [auth.verify_no_token],
   (req, res) => {
     userHandler.listUser(req, res)
   })
@@ -58,7 +60,7 @@ router.get('/listUser',
 router.put('/updateUser', [
   check('user_id').not().isEmpty(),
 ],
-  [utility.verify_token],
+  [auth.verify_token],
   (req, res, next) => {
     validator(req, res, next)
   },
@@ -69,12 +71,57 @@ router.put('/updateUser', [
 router.delete('/deleteUser', [
   check('user_id').not().isEmpty(),
 ],
-  [utility.verify_token],
+  [auth.verify_token],
   (req, res, next) => {
     validator(req, res, next)
   },
   (req, res) => {
     userHandler.deleteUser(req, res)
   })
+
+  router.post('/addAddress', [
+    check('user_id').not().isEmpty(),
+  ],
+    [auth.verify_token],
+    (req, res, next) => {
+      validator(req, res, next)
+    },
+    (req, res) => {
+      userHandler.addUserAddress(req, res)
+    })
+
+    router.get('/listUserAddress',
+    (req, res, next) => {
+  
+      validator(req, res, next)
+    },
+    [auth.verify_token],
+    (req, res) => {
+      userHandler.listUserAddress(req, res)
+    })
+  
+    router.delete('/deleteUserAddress', [
+      check('user_address_id').not().isEmpty(),
+    ],
+      [auth.verify_token],
+      (req, res, next) => {
+        validator(req, res, next)
+      },
+      (req, res) => {
+        userHandler.deleteUserAddress(req, res)
+      })
+
+        
+    router.put('/updateUserAddress', [
+      check('user_address_id').not().isEmpty(),
+    ],
+      [auth.verify_token],
+      (req, res, next) => {
+        validator(req, res, next)
+      },
+      (req, res) => {
+        userHandler.updateUserAddress(req, res)
+      })
+
 
 module.exports = router;
